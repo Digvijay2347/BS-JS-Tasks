@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Form</title>
+</head>
+<body>
+    <h1>Contact Us</h1>
+    <form id="contactForm" onsubmit="return validateForm()">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name">
+        <span id="nameError" style="color: red;"></span><br>
+
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email">
+        <span id="emailError" style="color: red;"></span><br>
+
+        <label for="website">Website:</label>
+        <input type="text" id="website" name="website">
+        <span id="websiteError" style="color: red;"></span><br>
+
+        <label for="message">Message:</label>
+        <textarea id="message" name="message"></textarea>
+        <span id="messageError" style="color: red;"></span><br>
+
+        <input type="submit" value="Submit">
+    </form>
+
+    <script>
+        function validateForm() {
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const website = document.getElementById("website").value;
+            const message = document.getElementById("message").value;
+
+            // Initialize error messages
+            const errorMessages = [];
+
+            // Reset previous error messages
+            resetErrorMessages();
+
+            // Validate Name (required)
+            if (name.trim() === "") {
+                setError("nameError", "Name: This field is required");
+                errorMessages.push("Name: This field is required");
+            }
+
+            // Validate Email (required and valid format)
+            if (email.trim() === "") {
+                setError("emailError", "Email: A valid email address is required");
+                errorMessages.push("Email: A valid email address is required");
+            } else if (!isValidEmail(email)) {
+                setError("emailError", "Email: Invalid email format");
+                errorMessages.push("Email: Invalid email format");
+            }
+
+            // Validate Website (URL)
+            if (website.trim() !== "") {
+                if (!isValidURL(website)) {
+                    setError("websiteError", "Website: A valid URL is required");
+                    errorMessages.push("Website: A valid URL is required");
+                }
+            } else {
+                setError("websiteError", "Website: This field is required");
+                errorMessages.push("Website: This field is required");
+            }
+
+            // Validate Message (required)
+            if (message.trim() === "") {
+                setError("messageError", "Message: This field is required");
+                errorMessages.push("Message: This field is required");
+            }
+
+            // Display error messages
+            if (errorMessages.length > 0) {
+                return false;
+            }
+
+            // Form is valid, allow submission
+            return true;
+        }
+
+        // Helper function to set error message
+        function setError(id, message) {
+            const errorElement = document.getElementById(id);
+            errorElement.textContent = message;
+        }
+
+        // Helper function to reset error messages
+        function resetErrorMessages() {
+            const errorElements = document.querySelectorAll("[id$='Error']");
+            for (const errorElement of errorElements) {
+                errorElement.textContent = "";
+            }
+        }
+
+        // Helper function to validate email format
+        function isValidEmail(email) {
+            const emailPattern = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
+            return emailPattern.test(email);
+        }
+
+        // Helper function to validate URL format
+        function isValidURL(url) {
+            const urlPattern = /^(http|https):\/\/[^\s$.?#].[^\s]*$/;
+            return urlPattern.test(url);
+        }
+    </script>
+</body>
+</html>
